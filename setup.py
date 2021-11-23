@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="decontractions",
@@ -9,9 +9,7 @@ setup(
     author="Akmal",
     author_email="akmal@depia.wiki",
     url="https://github.com/Wikidepia/decontractions",
-    package_data={
-        "decontractions": ["*.json", "*.binary"]
-    },
+    package_data={"decontractions": ["*.json"]},
     install_requires=[
         "kenlm@https://github.com/kpu/kenlm/archive/master.zip",
     ],

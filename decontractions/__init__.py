@@ -1,5 +1,6 @@
 import json
 import os
+import urllib.request
 
 import kenlm
 
@@ -9,9 +10,22 @@ class Decontractor:
         """
         Initialize the decontraction class.
         """
-        module_path = os.path.dirname(os.path.realpath(__file__))
-        self.model = kenlm.Model(os.path.join(module_path, "3-gram.pruned.3e-7.binary"))
-        self.contractions = json.load(open(os.path.join(module_path, "contractions_data.json")))
+        self.module_path = os.path.dirname(os.path.realpath(__file__))
+        self.model_path = os.path.join(self.module_path, "3-gram.pruned.3e-7.binary")
+        self.data_path = os.path.join(self.module_path, "contractions_data.json")
+        if not os.path.exists(self.model_path):
+            self.download_model()
+        self.model = kenlm.Model(self.model_path)
+        self.contractions = json.load(open(self.data_path))
+
+    def download_model(self):
+        """
+        Downloads the data for the decontraction class.
+        """
+        model_url = "https://github.com/Wikidump/rel/releases/download/decontractions-lm-1/3-gram.pruned.3e-7.binary"
+        with urllib.request.urlopen(model_url) as f:
+            with open(self.model_path, "wb") as f_out:
+                f_out.write(f.read())
 
     def __call__(self, text: str) -> str:
         """
